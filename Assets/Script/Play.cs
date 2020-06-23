@@ -5,8 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class Play : MonoBehaviour
 {
-    public void Mulai() {
-        SceneManager.LoadScene("SampleScene");
+    public void next_intro()
+    {
+        SceneManager.LoadScene("intro1");
     }
 
+    public void goto_avianflu()
+    {
+        SceneManager.LoadScene("intro_avianflu");
+    }
+
+    public void mulai_game1()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
 }
