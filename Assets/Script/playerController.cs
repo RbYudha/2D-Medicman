@@ -14,6 +14,8 @@ public class playerController : MonoBehaviour
     private Rigidbody2D fox;
     private Animator foxAnim;
     private Collider2D collFox;
+    //private AudioSource footstep;
+
     private enum State { idle, running, jumping, falling, hurt }; //State {0, 1, 2, ....}
     private State state = State.idle; //keadaan
 
@@ -21,12 +23,20 @@ public class playerController : MonoBehaviour
     [SerializeField] private int cherries = 0;
     [SerializeField] private Text cherryText;
     //public int cherries = 0;
-    [SerializeField] private float hurtForce = 10f;
+    [SerializeField] private float hurtForce = 6f;
+
+    //Suara
+    [SerializeField] private AudioSource footstep;
+    [SerializeField] private AudioSource medicine;
+    [SerializeField] private AudioSource killEnemy;
+    [SerializeField] private AudioSource jumping;
+    [SerializeField] private AudioSource kenaMusuh;
 
     private void Start() {
         fox = GetComponent<Rigidbody2D>();
         foxAnim = GetComponent<Animator>();
         collFox = GetComponent<Collider2D>();
+        //footstep = GetComponent<AudioSource>();
     }    
 
     private void Update()
@@ -59,6 +69,7 @@ public class playerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && collFox.IsTouchingLayers(ground))
         {
+            jumping.Play();
             Jump();
         }
     }
@@ -106,6 +117,8 @@ public class playerController : MonoBehaviour
         }
     }
 
+
+    //kill musuh
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -115,6 +128,7 @@ public class playerController : MonoBehaviour
 
             if (state == State.falling)
             {
+                killEnemy.Play();
                 Destroy(collision.gameObject);
                 Jump();
             }
@@ -123,13 +137,15 @@ public class playerController : MonoBehaviour
                 state = State.hurt;
                 if (collision.gameObject.transform.position.x > transform.position.x)
                 {
+                    kenaMusuh.Play();
                     //enemy is to the right, trown left
-                    fox.velocity = new Vector2(-hurtForce, fox.velocity.y);
+                    fox.velocity = new Vector2(-7f, fox.velocity.y);
                 }
                 else
                 {
+                    kenaMusuh.Play();
                     //enemy is to the left, trown right
-                    fox.velocity = new Vector2(hurtForce, fox.velocity.y);
+                    fox.velocity = new Vector2(7f, fox.velocity.y);
                 }
             }
         }
@@ -139,10 +155,15 @@ public class playerController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Collectable") {
+            medicine.Play();
             Destroy(collision.gameObject);
             cherries += 1;
             cherryText.text = cherries.ToString();
         }
+    }
+
+    private void Footstep() {
+        footstep.Play();
     }
 
 }

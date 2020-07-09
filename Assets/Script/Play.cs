@@ -19,4 +19,28 @@ public class Play : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene");
     }
+
+    [SerializeField] private string sceneName;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+    }
+
+    public void mulai_game2()
+    {
+        SceneManager.LoadScene("Level2p");
+    }
+
+    public void mulai_game3()
+    {
+        SceneManager.LoadScene("Level3");
+    }
+
+    public void quit_game()
+    {
+        Application.Quit();
+    }
 }
